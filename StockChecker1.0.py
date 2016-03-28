@@ -18,81 +18,72 @@ import os
 
 clear = lambda: os.system('cls')
 
-StockRank = 0 #start number for later ranking of stocks
-
-clear()
-''' aquire the users Stock Ticker'''
-stock = input('Please add ticker here (example wef.to):')
-print('You are running Steve\'s Stock Analyzer on the stock ticker:' + str(stock))
-
-
-
-
-''' Yahoo Scrapes **********************************************************'''
-
+StockRank = 0  # start number for later ranking of stocks
 def get_marketCap(self):
     ''' 0 Scrape Yahoo for the current Market Cap'''
     optionsUrl = "https://ca.finance.yahoo.com/q/ks?s=" + stock
     optionsPage = urlopen(optionsUrl)
-    soup = BeautifulSoup(optionsPage , "lxml") #lxml defined for other sytems in case not running lxml by default
+    soup = BeautifulSoup(optionsPage, "lxml")  # lxml defined for other sytems in case not running lxml by default
     tag0 = soup.findAll('td', {'class': 'yfnc_tablehead1'})[0]
     mCap = str(tag0.nextSibling.text)
-    return mCap     
-      
+    return mCap
+
 
 def get_priceEarn(self):
     '''2 Price to Earnings Yahoo Scrape'''
     optionsUrl = "https://ca.finance.yahoo.com/q/ks?s=" + stock
     optionsPage = urlopen(optionsUrl)
-    soup = BeautifulSoup(optionsPage , "lxml") #lxml defined for other sytems in case not running lxml by default
+    soup = BeautifulSoup(optionsPage, "lxml")  # lxml defined for other sytems in case not running lxml by default
     tag2 = soup.findAll('td', {'class': 'yfnc_tablehead1'})[2]
     priceEarn = float(tag2.nextSibling.text)
     return priceEarn
-         
 
-def get_priceEarnGrowth(self):        
+
+def get_priceEarnGrowth(self):
     '''4 Price to Earnings Growth'''
     optionsUrl = "https://ca.finance.yahoo.com/q/ks?s=" + stock
     optionsPage = urlopen(optionsUrl)
-    soup = BeautifulSoup(optionsPage , "lxml") #lxml defined for other sytems in case not running lxml by default
+    soup = BeautifulSoup(optionsPage, "lxml")  # lxml defined for other sytems in case not running lxml by default
     tag4 = soup.findAll('td', {'class': 'yfnc_tablehead1'})[4]
     peg = float(tag4.nextSibling.text)
     return peg
 
 
-def get_priceSales(self):        
+def get_priceSales(self):
     '''5 Price to Sales Scrape'''
     optionsUrl = "https://ca.finance.yahoo.com/q/ks?s=" + stock
     optionsPage = urlopen(optionsUrl)
-    soup = BeautifulSoup(optionsPage , "lxml") #lxml defined for other sytems in case not running lxml by default
+    soup = BeautifulSoup(optionsPage, "lxml")  # lxml defined for other sytems in case not running lxml by default
     tag5 = soup.findAll('td', {'class': 'yfnc_tablehead1'})[5]
     priceSales = str(tag5.nextSibling.text)
     return priceSales
-      
-      
+
+
 def get_priceBook(self):
     '''6 Price to Book Scrape from Yahoo '''
     optionsUrl = "https://ca.finance.yahoo.com/q/ks?s=" + stock
     optionsPage = urlopen(optionsUrl)
-    soup = BeautifulSoup(optionsPage , "lxml") #lxml defined for other sytems in case not running lxml by default
+    soup = BeautifulSoup(optionsPage, "lxml")  # lxml defined for other sytems in case not running lxml by default
     tag6 = soup.findAll('td', {'class': 'yfnc_tablehead1'})[6]
     pbr = float(tag6.nextSibling.text)
-    return pbr  
+    return pbr
+
 
 def get_enterpriseValue(self):
     ''' 8 Scrape Yahoo for the current Enterprise Value / EBITDA'''
     optionsUrl = "https://ca.finance.yahoo.com/q/ks?s=" + stock
     optionsPage = urlopen(optionsUrl)
-    soup = BeautifulSoup(optionsPage , "lxml") #lxml defined for other sytems in case not running lxml by default
+    soup = BeautifulSoup(optionsPage, "lxml")  # lxml defined for other sytems in case not running lxml by default
     tag8 = soup.findAll('td', {'class': 'yfnc_tablehead1'})[8]
-    enterpriseValue= str(tag8.nextSibling.text)
-    return enterpriseValue     
-        
-def get_stockName(self): 
-    '''9 Scrape Full Stock name associated with ticker'''       
+    enterpriseValue = str(tag8.nextSibling.text)
+    return enterpriseValue
+
+
+def get_stockName(self):
+    '''9 Scrape Full Stock name associated with ticker'''
     optionsUrl = "https://ca.finance.yahoo.com/q/ks?s=" + stock
     optionsPage = urlopen(optionsUrl)
-    soup = BeautifulSoup(optionsPage , "lxml") #lxml defined for other sytems in case not running lxml by default
+    soup = BeautifulSoup(optionsPage, "lxml")  # lxml defined for other sytems in case not running lxml by default
     tag9 = soup.findAll('h2')[3]
     stockName = str(tag9.text)
     return stockName.title()
@@ -102,38 +93,38 @@ def get_netProfit(self):
     '''12	Operating Margin (ttm):8.01% (AKA Net Profit Margin)'''
     optionsUrl = "https://ca.finance.yahoo.com/q/ks?s=" + stock
     optionsPage = urlopen(optionsUrl)
-    soup = BeautifulSoup(optionsPage , "lxml") #lxml defined for other sytems in case not running lxml by default
+    soup = BeautifulSoup(optionsPage, "lxml")  # lxml defined for other sytems in case not running lxml by default
     tag12 = soup.findAll('td', {'class': 'yfnc_tablehead1'})[12]
     netProfit = str(tag12.nextSibling.text)
-    return netProfit   
- 
-  
+    return netProfit
+
+
 def get_roe(self):
     '''14 Scrape Yahoo for the Current Return on Equity'''
     optionsUrl = "https://ca.finance.yahoo.com/q/ks?s=" + stock
     optionsPage = urlopen(optionsUrl)
-    soup = BeautifulSoup(optionsPage , "lxml") #lxml defined for other sytems in case not running lxml by default
+    soup = BeautifulSoup(optionsPage, "lxml")  # lxml defined for other sytems in case not running lxml by default
     tag14 = soup.findAll('td', {'class': 'yfnc_tablehead1'})[14]
     roe = str(tag14.nextSibling.text)
     return roe
-  
-   
+
+
 def get_quarterRevGrowth(self):
     '''index 17 Scrape Yahoo for Quarterly Revenue Growth '''
     optionsUrl = "https://ca.finance.yahoo.com/q/ks?s=" + stock
     optionsPage = urlopen(optionsUrl)
-    soup = BeautifulSoup(optionsPage , "lxml") #lxml defined for other sytems in case not running lxml by default
+    soup = BeautifulSoup(optionsPage, "lxml")  # lxml defined for other sytems in case not running lxml by default
     tag17 = soup.findAll('td', {'class': 'yfnc_tablehead1'})[17]
     quarterRevGrowth = str(tag17.nextSibling.text)
-    return quarterRevGrowth  
- 
+    return quarterRevGrowth
+
 
 def get_currentPrice(self):
     '''20 Current Price of Stock'''
     optionsUrl = "https://ca.finance.yahoo.com/q/ks?s=" + stock
     optionsPage = urlopen(optionsUrl)
-    soup = BeautifulSoup(optionsPage , "lxml") #lxml defined for other sytems in case not running lxml by default
-    tag20 = soup.findAll('span')[20]  #gets current stock price
+    soup = BeautifulSoup(optionsPage, "lxml")  # lxml defined for other sytems in case not running lxml by default
+    tag20 = soup.findAll('span')[20]  # gets current stock price
     currentPrice = float(tag20.text)
     return currentPrice
 
@@ -142,37 +133,37 @@ def get_earningsPerShare(self):
     '''21 Earnings Per Share Calc '''
     optionsUrl = "https://ca.finance.yahoo.com/q/ks?s=" + stock
     optionsPage = urlopen(optionsUrl)
-    soup = BeautifulSoup(optionsPage , "lxml") #lxml defined for other sytems in case not running lxml by default
+    soup = BeautifulSoup(optionsPage, "lxml")  # lxml defined for other sytems in case not running lxml by default
     tag21 = soup.findAll('td', {'class': 'yfnc_tablehead1'})[21]
     eps = float(tag21.nextSibling.text)
     return eps
 
-  
-def get_debtEquity(self):   
+
+def get_debtEquity(self):
     '''26 Debt to Equity Ratio Scrape '''
     optionsUrl = "https://ca.finance.yahoo.com/q/ks?s=" + stock
     optionsPage = urlopen(optionsUrl)
-    soup = BeautifulSoup(optionsPage , "lxml") #lxml defined for other sytems in case not running lxml by default
+    soup = BeautifulSoup(optionsPage, "lxml")  # lxml defined for other sytems in case not running lxml by default
     tag26 = soup.findAll('td', {'class': 'yfnc_tablehead1'})[26]
     dToE = float(tag26.nextSibling.text)
     return dToE
 
 
-def get_currentRatio(self):    
+def get_currentRatio(self):
     '''27 Current Ratio Yahoo Scrape '''
     optionsUrl = "https://ca.finance.yahoo.com/q/ks?s=" + stock
     optionsPage = urlopen(optionsUrl)
-    soup = BeautifulSoup(optionsPage , "lxml") #lxml defined for other sytems in case not running lxml by default
+    soup = BeautifulSoup(optionsPage, "lxml")  # lxml defined for other sytems in case not running lxml by default
     tag27 = soup.findAll('td', {'class': 'yfnc_tablehead1'})[27]
     currentRatio = float(tag27.nextSibling.text)
     return currentRatio
-                
-        
+
+
 def get_bookPerShare(self):
-    '''28 Book Value Per Share Calc '''   
+    '''28 Book Value Per Share Calc '''
     optionsUrl = "https://ca.finance.yahoo.com/q/ks?s=" + stock
     optionsPage = urlopen(optionsUrl)
-    soup = BeautifulSoup(optionsPage , "lxml") #lxml defined for other sytems in case not running lxml by default    
+    soup = BeautifulSoup(optionsPage, "lxml")  # lxml defined for other sytems in case not running lxml by default
     tag28 = soup.findAll('td', {'class': 'yfnc_tablehead1'})[28]
     bps = float(tag28.nextSibling.text)
     return bps
@@ -182,7 +173,7 @@ def get_leveredFCF(self):
     '''30 levered free cash flow '''
     optionsUrl = "https://ca.finance.yahoo.com/q/ks?s=" + stock
     optionsPage = urlopen(optionsUrl)
-    soup = BeautifulSoup(optionsPage , "lxml") #lxml defined for other sytems in case not running lxml by default
+    soup = BeautifulSoup(optionsPage, "lxml")  # lxml defined for other sytems in case not running lxml by default
     tag30 = soup.findAll('td', {'class': 'yfnc_tablehead1'})[30]
     leveredFCF = str(tag30.nextSibling.text)
     return leveredFCF
@@ -192,7 +183,7 @@ def get_sharesOut(self):
     ''' 40 Shares Outstanding ... ideally (FCF) / (# of shares) / (stock price) = Free Cash Yield goes here '''
     optionsUrl = "https://ca.finance.yahoo.com/q/ks?s=" + stock
     optionsPage = urlopen(optionsUrl)
-    soup = BeautifulSoup(optionsPage , "lxml") #lxml defined for other sytems in case not running lxml by default
+    soup = BeautifulSoup(optionsPage, "lxml")  # lxml defined for other sytems in case not running lxml by default
     tag40 = soup.findAll('td', {'class': 'yfnc_tablehead1'})[40]
     sharesOut = str(tag40.nextSibling.text)
     return sharesOut
@@ -202,26 +193,27 @@ def get_insider(self):
     '''42	% Held by Insiders '''
     optionsUrl = "https://ca.finance.yahoo.com/q/ks?s=" + stock
     optionsPage = urlopen(optionsUrl)
-    soup = BeautifulSoup(optionsPage , "lxml") #lxml defined for other sytems in case not running lxml by default
+    soup = BeautifulSoup(optionsPage, "lxml")  # lxml defined for other sytems in case not running lxml by default
     tag42 = soup.findAll('td', {'class': 'yfnc_tablehead1'})[42]
     insiders = str(tag42.nextSibling.text)
     return insiders
-  
-   
+
+
 def get_institutions(self):
     ''' 43	Scrape for % Held by Institutions '''
     optionsUrl = "https://ca.finance.yahoo.com/q/ks?s=" + stock
     optionsPage = urlopen(optionsUrl)
-    soup = BeautifulSoup(optionsPage , "lxml") #lxml defined for other sytems in case not running lxml by default
+    soup = BeautifulSoup(optionsPage, "lxml")  # lxml defined for other sytems in case not running lxml by default
     tag43 = soup.findAll('td', {'class': 'yfnc_tablehead1'})[43]
     institutions = str(tag43.nextSibling.text)
     return institutions
 
+
 def get_dividend(self):
-    '''50 Scrape Yahoo for the Current Dividend'''    
+    '''50 Scrape Yahoo for the Current Dividend'''
     optionsUrl = "https://ca.finance.yahoo.com/q/ks?s=" + stock
     optionsPage = urlopen(optionsUrl)
-    soup = BeautifulSoup(optionsPage , "lxml") #lxml defined for other sytems in case not running lxml by default
+    soup = BeautifulSoup(optionsPage, "lxml")  # lxml defined for other sytems in case not running lxml by default
     tag50 = soup.findAll('td', {'class': 'yfnc_tablehead1'})[50]
     dividend = float(tag50.nextSibling.text)
     return dividend
@@ -231,7 +223,7 @@ def get_divYield(self):
     '''51 Scrape Yahoo For the Dividend Yield'''
     optionsUrl = "https://ca.finance.yahoo.com/q/ks?s=" + stock
     optionsPage = urlopen(optionsUrl)
-    soup = BeautifulSoup(optionsPage , "lxml") #lxml defined for other sytems in case not running lxml by default
+    soup = BeautifulSoup(optionsPage, "lxml")  # lxml defined for other sytems in case not running lxml by default
     tag51 = soup.findAll('td', {'class': 'yfnc_tablehead1'})[51]
     divYield = str(tag51.nextSibling.text)
     return divYield
@@ -241,275 +233,250 @@ def get_fiveYearDiv(self):
     '''52 Scrape yahoo for the 5 year Dividend Yield'''
     optionsUrl = "https://ca.finance.yahoo.com/q/ks?s=" + stock
     optionsPage = urlopen(optionsUrl)
-    soup = BeautifulSoup(optionsPage , "lxml") #lxml defined for other sytems in case not running lxml by default
+    soup = BeautifulSoup(optionsPage, "lxml")  # lxml defined for other sytems in case not running lxml by default
     tag52 = soup.findAll('td', {'class': 'yfnc_tablehead1'})[52]
     fiveYearDiv = str(tag52.nextSibling.text)
     return fiveYearDiv
 
-    
-
-
-
 
 ''' Calculations ***********************************************************'''
 
-def calc_grahamNum(self):    
-    ''' Graham Number Calculator '''    
-    grahamNum = round(float(math.sqrt(22.5 * eps * bps)),2)
+
+def calc_grahamNum(self):
+    ''' Graham Number Calculator '''
+    grahamNum = round(float(math.sqrt(22.5 * eps * bps)), 2)
     return grahamNum
 
 
 def calc_sellPrice(self):
     '''Calculate the Suggested price to sell this stock at'''
     grahamSell = float(math.sqrt(22.5 * eps * bps))
-    sellPrice = round((float(grahamSell * 1.5)),2)
+    sellPrice = round((float(grahamSell * 1.5)), 2)
     return sellPrice
+
 
 def calc_fairValue(self):
     grahamSell = float(math.sqrt(22.5 * eps * bps))
-    fairValue = round((float(grahamSell * 1.25)),2)
+    fairValue = round((float(grahamSell * 1.25)), 2)
     return fairValue
 
-'''
+
+
 def calc_ncav(Self):
-    #Net Current Asset Value As Described by Ben Graham - You want 2/3 or 66% 
+    #Net Current Asset Value As Described by Ben Graham - You want 2/3 or 66%
     #of this number as a but Price
-    ncavFairValue= float((currentAssets - totalLiabilities) / sharesOutstanding)
-    ncavBuy= float(ncavFairValue * 0.66)
-    return ncavBuy 
-'''
+    try:
+        ncavFairValue= float((currentAssets - totalLiabilities) / sharesOutstanding)
+        ncavBuy= float(ncavFairValue * 0.66)
+        return ncavBuy
+    except:
+        print("unable to Calculate the NCAV for this stock")
+        print("")
+        pass
+
 
 def line():
     print('--------------------------------------------------------------------------')
-      
+
+clear()
+''' aquire the users Stock Ticker'''
+#Get Users Ticker or Quit
+stock = input("Please add ticker here (type 'quit' to stop): ")
 
 
-''' Main Program Body ***********************************************************************'''
-
-
-''' full Stock Name '''
-stockName = get_stockName(stock)
-print('You are doing a check on: ' + str(stockName))
-line()
-
-
-
-'''Current Price'''
-currentPrice = get_currentPrice(stock)
-print(('The Current Stock Price is:$') + ('\t') + str(currentPrice))
-print()
-
-
-
-''' earnings per share'''
-eps = get_earningsPerShare(stock)
-# Printout under Graham Number below for Console formatting
-
-
-''' book value '''
-bps = get_bookPerShare(stock)
-# Printout under Graham Number below for Console formatting
-
-
-
-'''Graham Number & Fair Value & Sell Price'''
-grahamNum = calc_grahamNum(stock)
-fairValue = calc_fairValue(stock)
-sellPrice = calc_sellPrice(stock)
-print(('Graham Number is: $') + ('\t') + str(grahamNum))
-print(('The Fair Value of the Stock is: $') + ('\t') + str(fairValue))
-print(('The Price I\'d recommend selling at is: $') + ('\t') + str(sellPrice))
-
-
-
-if currentPrice <= grahamNum:
-    print('PASS - This stock appears to be at an excellent buy price at the moment')
-
-elif fairValue > currentPrice > grahamNum:
-    print('CAUTION - The stock is still trading below the the Fair Value price BUT is still a bit expensive to buy at the moment')
+if stock == 'quit':
+    active = False
 
 else:
-    print('FAIL - This stock is currently not trading at a discount')
-print()
+    x = 1
+    while x == 1:
+        stock = stock.upper()
+        print('You are running Steve\'s Stock Analyzer on the stock ticker:' + str(stock))
 
-''' Earnings Per Share '''
-#defined Earlier
-print(('The Earnings Per Share is') + '\t' + str(eps))
-if eps > 0:
-    print('PASS - This Stock Has a Positive Earnings ')
-else:
-    print('FAIL - This Stock is currently Failing the Earnings Per Share Requirement')
-print()
+        ''' Yahoo Scrapes **********************************************************'''
+
+
+
+
+        ''' Main Program Body ***********************************************************************'''
+        #Start main loop for the program
+
+        active = True
+        while active:
+            ''' full Stock Name '''
+            stockName = get_stockName(stock)
+            print('You are doing a check on: ' + str(stockName))
+            line()
+
+            '''Current Price'''
+            currentPrice = get_currentPrice(stock)
+            print(('The Current Stock Price is:$') + ('\t') + str(currentPrice))
+            print()
 
-''' Book Value Per Share'''
-print(('Book Value Per Share is') + '\t' + str(bps))
-print()
+            ''' earnings per share'''
+            eps = get_earningsPerShare(stock)
+            # Printout under Graham Number below for Console formatting
 
+
+            ''' book value '''
+            bps = get_bookPerShare(stock)
+            # Printout under Graham Number below for Console formatting
+
+
 
-'''Price To Book '''
-pbr = get_priceBook(stock)
-
-if float(pbr) < 1.5:
-    print('PASS - Price to Book is excellent and appears to be selling at a discount!')
-
-elif 1.5 < float(pbr) < 2.5:
-    print('Moderate - Price to Book is alright but getting a bit expensive')   
-
-else: 
-    print('FAIL - Price to Book is HIGH indicating this is an expensive stock indicate a company with serious underlying problems.')   
-print()
-
-
-
-
-''' Price to Earnings '''
-pe = float(get_priceEarn(stock))
-print('Price to Earnings Ratio :' + '\t' + str(pe))
-if 0 < pe < 15:
-    print ('PASS - Price to earnings is below 15')
-else:
-    print ('FAILED - Price to Earnings check')
-print()
-
-
-
-''' Price to Earnings Growth'''
-peg = get_priceEarnGrowth(stock)
-print('Price to Earnings Growth Ratio :' + '\t' + str(peg))
-if peg < 1:
-    print('PASS - PEG ratio lower than 1 means a stock is below its fair value')
-else:
-    print('FAIL - PEG ratio greater than 1 means the stock is relatively expensive')
-print()
-
-
-
-''' Current Ratio '''
-currentRatio = float(get_currentRatio(stock))
-print(('Current Ratio') + "\t" + str(stock) + "\t" + str(currentRatio))
-
-if 1.5 < currentRatio < 2.4:
-    print ('PASS - Current ratio is in a good Range')
-
-elif currentRatio > 2.4:
-    print('CAUTION - The Current Ratio is too high - this may mean the company has some problems')
-
-else:
-    print('FAIL - The Current Ratio is out of an acceptable range')
-print()
-
-
-
-''' Market Cap'''
-marketCap = get_marketCap(stock)
-mCapStrip = float(marketCap.rstrip("MB")) #strips the M or B off the back to allow use in calculations 
-
-print(('The Current Market Cap is:') + str(marketCap))
-if mCapStrip > 500:
-    print ('PASS -  This company is large enough to expect a long future')
-
-elif 300 < mCapStrip < 500 :
-    print('CAUTION - This company is a bit small though on the Canadian Market it should still be acceptable')
-
-else:
-    print('FAIL - The Market Cap is out of an acceptable range - if there is a "B" for billion after the Current Market Cap ignore this Fail!')
-print()
-
-
-
-
-'''  Debt to Equity'''
-debtEquity = get_debtEquity(stock)
-print(('Debt to Equity Ratio') + "\t" + str(stock) + "\t" + ('is: ') + str(debtEquity))
-
-if float(debtEquity) < 120:
-    print(('PASS - The Debt to Equity Ratio is under 120 which is good Lower numbers are generally preferred because high debt loads can turn into big problems in a downturn.'))
-else:
-    print(('FAIL - Debt to equiy ratio is high, this can sometimes be acceptable. Taking on more debt during expansionary times gives a boost to profits. Heavy established industries like utilities and industrials generally have higher debt-equity ratios than rapidly growing companies that may carry little or no debt at all') + ('\t'))    
-print()
-
-
-
-''' Price to Sales '''
-priceSales = float(get_priceSales(stock))
-print(('Price to Sales Ratio') + "\t" + str(stock) + "\t" + ('is: ') + str(priceSales))
-
-if float(priceSales) < 1:
-    print(('PASS - The Price to Sales Ratio ( A very important one) is Excellent however bear in mind the beauty of a low P/S ratio can be spoiled by a constant lack of profitability and large levels of debt.') + ('\n'))
-else:
-    print(('FAIL - The Price to Sales Ratio is HIGH (A very important ratio) - Like other ratios, you should compare the P/S of a stock of those with competitors and with historical sales multiples. Sales are also more difficult to manipulate than earnings, giving a more reliable gauge of value. ') + ('\n'))  
-print()
-
-
-
-''' Enterprise Value'''
-enterpriseValue = get_enterpriseValue(stock)
-print(('Enterprise Value / EBITDA for ') + "\t" + str(stock) + "\t" + ('is: ') + str(enterpriseValue))
-
-if float(enterpriseValue) < 7.5:
-    print('PASS')
-else:
-    print('FAIL') 
-print()
-
-
-
-
-
-'''
-
- print("\t" +('Net Free Cash Flow is Greater than 0')  + "\t" +str(stock) + "\t" + str(netFreeCash))
-    
-#####################################################
-
-    print(('Stock Sell Price is: $') + ('\t') + str(sellPrice))
-    print()
-
-####################################################
-
-    print(('The Current Dividend is:') + ('\t') + str(dividend))
-    
-###################################################
-    
-        print(('The Current Dividend Yield is:') + ('\t') + str(dividendYld))
-
-###################################################
-
-    print(('The 5 year average Dividend Yield is:') + ('\t') + str(fiveDividendYld))
-    
-        print(('Return on Equity (Ideally over 20%):') + ('\t') + str(ROE))
-
-
-    print(('The Market Cap (ideally is over $300 Million:)') + ('\t') + str(mCap))
-    
-        print(('The Quarterly Revenue Growth (increased Sales over time):') + ('\t') + str(qEarn))
-        
-            print(('Institutional Ownership (Ideally less than 60%):') + ('\t') + str(institutions))
-
-    print(('Insider Ownership:') + ('\t') + str(insiders))
-    
-    
-        print(('Net Profit Margin (The higher the better):') + ('\t') + str(netProfit))
-
-
-    print(('Net Free Cash Flow (Higher is better - No Negatives):') + ('\t') + str(LFC))
-
-
-    print(('Number of Shares Outstanding:') + ('\t') + str(Shares))
-
-
-
-'''
-
-
-
-
-
-
-
-
-
-#************************************************************************** TO ADD LATER ***************************************************************************
+            '''Graham Number & Fair Value & Sell Price'''
+            try:
+                grahamNum = calc_grahamNum(stock)
+                fairValue = calc_fairValue(stock)
+                sellPrice = calc_sellPrice(stock)
+                print(('Graham Number is: $') + ('\t') + str(grahamNum))
+                print(('The Fair Value of the Stock is: $') + ('\t') + str(fairValue))
+                print(('The Price I\'d recommend selling at is: $') + ('\t') + str(sellPrice))
+
+                if currentPrice <= grahamNum:
+                    print('PASS - This stock appears to be at an excellent buy price at the moment')
+
+                elif fairValue > currentPrice > grahamNum:
+                    print(
+                        'CAUTION - The stock is still trading below the the Fair Value price BUT is still a bit expensive to buy at the moment')
+
+                else:
+                    print('FAIL - This stock is currently not trading at a discount')
+                print()
+
+            except:
+                print("The Graham Number can not be calculated")
+                print("")
+                pass
+
+            ''' Earnings Per Share '''
+            # defined Earlier
+            print(('The Earnings Per Share is') + '\t' + str(eps))
+            if eps > 0:
+                print('PASS - This Stock Has a Positive Earnings ')
+            else:
+                print('FAIL - This Stock is currently Failing the Earnings Per Share Requirement')
+            print()
+
+            ''' Book Value Per Share'''
+            print(('Book Value Per Share is') + '\t' + str(bps))
+            print()
+
+            '''Price To Book '''
+            pbr = get_priceBook(stock)
+
+            if float(pbr) < 1.5:
+                print('PASS - Price to Book is excellent and appears to be selling at a discount!')
+
+            elif 1.5 < float(pbr) < 2.5:
+                print('Moderate - Price to Book is alright but getting a bit expensive')
+
+            else:
+                print(
+                    'FAIL - Price to Book is HIGH indicating this is an expensive stock indicate a company with serious underlying problems.')
+            print()
+
+            try:
+                ''' Price to Earnings '''
+                pe = float(get_priceEarn(stock))
+                print('Price to Earnings Ratio :' + '\t' + str(pe))
+                if 0 < pe < 15:
+                    print('PASS - Price to earnings is below 15')
+                else:
+                    print('FAILED - Price to Earnings check')
+                print()
+
+            except:
+                pass
+
+            ''' Price to Earnings Growth'''
+            peg = get_priceEarnGrowth(stock)
+            print('Price to Earnings Growth Ratio :' + '\t' + str(peg))
+            if peg < 1:
+                print('PASS - PEG ratio lower than 1 means a stock is below its fair value')
+            else:
+                print('FAIL - PEG ratio greater than 1 means the stock is relatively expensive')
+            print()
+
+            ''' Current Ratio '''
+            currentRatio = float(get_currentRatio(stock))
+            print(('Current Ratio') + "\t" + str(stock) + "\t" + str(currentRatio))
+
+            if 1.5 < currentRatio < 2.4:
+                print('PASS - Current ratio is in a good Range')
+
+            elif currentRatio > 2.4:
+                print('CAUTION - The Current Ratio is too high - this may mean the company has some problems')
+
+            else:
+                print('FAIL - The Current Ratio is out of an acceptable range')
+            print()
+
+            ''' Market Cap'''
+            marketCap = get_marketCap(stock)
+            mCapStrip = float(marketCap.rstrip("MB"))  # strips the M or B off the back to allow use in calculations
+
+            print(('The Current Market Cap is:') + str(marketCap))
+            if mCapStrip > 500:
+                print('PASS -  This company is large enough to expect a long future')
+
+            elif 300 < mCapStrip < 500:
+                print('CAUTION - This company is a bit small though on the Canadian Market it should still be acceptable')
+
+            else:
+                print(
+                    'FAIL - The Market Cap is out of an acceptable range - if there is a "B" for billion after the Current Market Cap ignore this Fail!')
+            print()
+
+            try:
+                '''  Debt to Equity'''
+                debtEquity = get_debtEquity(stock)
+                print(('Debt to Equity Ratio') + "\t" + str(stock) + "\t" + ('is: ') + str(debtEquity))
+
+                if float(debtEquity) < 120:
+                    print((
+                          'PASS - The Debt to Equity Ratio is under 120 which is good Lower numbers are generally preferred because high debt loads can turn into big problems in a downturn.'))
+                else:
+                    print((
+                          'FAIL - Debt to equiy ratio is high, this can sometimes be acceptable. Taking on more debt during expansionary times gives a boost to profits. Heavy established industries like utilities and industrials generally have higher debt-equity ratios than rapidly growing companies that may carry little or no debt at all') + (
+                          '\t'))
+                print()
+
+            except:
+                print("The Debt To Equity can not be calculated")
+                print("")
+
+            ''' Price to Sales '''
+            priceSales = float(get_priceSales(stock))
+            print(('Price to Sales Ratio') + "\t" + str(stock) + "\t" + ('is: ') + str(priceSales))
+
+            if float(priceSales) < 1:
+                print((
+                      'PASS - The Price to Sales Ratio ( A very important one) is Excellent however bear in mind the beauty of a low P/S ratio can be spoiled by a constant lack of profitability and large levels of debt.') + (
+                      '\n'))
+            else:
+                print((
+                      'FAIL - The Price to Sales Ratio is HIGH (A very important ratio) - Like other ratios, you should compare the P/S of a stock of those with competitors and with historical sales multiples. Sales are also more difficult to manipulate than earnings, giving a more reliable gauge of value. ') + (
+                      '\n'))
+            print()
+
+            ''' Enterprise Value'''
+            enterpriseValue = get_enterpriseValue(stock)
+            print(('Enterprise Value / EBITDA for ') + "\t" + str(stock) + "\t" + ('is: ') + str(enterpriseValue))
+
+            if float(enterpriseValue) < 7.5:
+                print('PASS')
+            else:
+                print('FAIL')
+            print()
+
+            x == 0
+
+
+
+
+
+# ************************************************************************** TO ADD LATER ***************************************************************************
 
 
 # also would like the average PE over 10 years
@@ -522,10 +489,10 @@ print()
 # if EPS increases quarter after quater this is called earnings momentum
 
 
-#print()
-#print('##########################################')
-#print()
-#print()
+# print()
+# print('##########################################')
+# print()
+# print()
 
 
 
